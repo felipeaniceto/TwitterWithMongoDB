@@ -12,7 +12,7 @@ bin/
 *.class
 
 # Package Files #
-*.jar
+
 *.jad
 *.war
 *.ear
