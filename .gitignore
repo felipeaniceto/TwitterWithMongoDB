@@ -1,6 +1,19 @@
+#ns specific 
+nbproject/private/
+build/
+nbbuild/
+nbproject/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+bin/
+# Class Files #
 *.class
 
 # Package Files #
 *.jar
+*.jad
 *.war
 *.ear
+*.svn
