@@ -5,6 +5,7 @@ import com.mongodb.DBObject;
 import com.mongodb.Mongodb;
 import com.twitter.TwitterApi;
 import java.util.List;
+import twitter4j.GeoLocation;
 import twitter4j.Tweet;
 
 public class App {
@@ -18,7 +19,7 @@ public class App {
     }
 
     private static void searchTwetts() {
-        TwitterApi.getInstance().setQuery("Siena 'Palio Weekend'", 5);
+        TwitterApi.getInstance().setQuery("Siena 'Palio Weekend'", 100);
     }
 
     private static void insertTwetts() {
@@ -28,7 +29,12 @@ public class App {
             bdbo.put("created_at", tweet.getCreatedAt().toString());
             bdbo.put("from_user", tweet.getFromUser());
             bdbo.put("from_user_id", tweet.getFromUserId());
-            bdbo.put("geo_location", tweet.getGeoLocation());
+            GeoLocation location = tweet.getGeoLocation();
+            if(location != null){
+                bdbo.put("geo_location", new BasicDBObject("latitude", tweet.getGeoLocation().getLatitude()).append("longitude", tweet.getGeoLocation().getLongitude()));
+            }else{
+                bdbo.put("geo_location", null);
+            }            
             bdbo.put("id", tweet.getId());
             bdbo.put("iso_language_code", tweet.getIsoLanguageCode());
             bdbo.put("location", tweet.getLocation());
@@ -43,9 +49,17 @@ public class App {
     }
     
     private static void find(){
-        List<DBObject> objs = Mongodb.getInstance().find();
+        
+        System.out.println(Mongodb.getInstance().size());
+        
+        List<DBObject> objs = Mongodb.getInstance().find(null,null);
         for (DBObject dBObject : objs) {
             System.out.println(dBObject.toString());
+        }
+        
+        List<String> list = Mongodb.getInstance().selectDistinct("from_user");
+        for (String value : list) {
+            System.out.println(value);
         }
     }
 }

@@ -50,23 +50,25 @@ public class Mongodb {
     public void removeAll() {
         collection.drop();
     }
+    
+    public long size(){
+        return collection.count();
+    }
+    
+    public List<String> selectDistinct(String key){
+        return selectDistinct(key, null);
+    }
+    
+    public List<String> selectDistinct(String key, DBObject query){
+        return collection.distinct(key, query);
+    }
 
     public List<DBObject> find() {
-        List<DBObject> dbObjects = new ArrayList<DBObject>();
-        DBCursor cur = collection.find();
-        while (cur.hasNext()) {
-            dbObjects.add(cur.next());
-        }
-        return dbObjects;
+        return find(null, null);
     }
 
     public List<DBObject> find(DBObject obj) {
-        List<DBObject> dbObjects = new ArrayList<DBObject>();
-        DBCursor cur = collection.find(obj);
-        while (cur.hasNext()) {
-            dbObjects.add(cur.next());
-        }
-        return dbObjects;
+        return find(obj, null);
     }
 
     public List<DBObject> find(DBObject obj, DBObject keys) {
