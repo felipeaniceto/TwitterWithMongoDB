@@ -2,7 +2,7 @@
 nbproject/private/
 build/
 nbbuild/
-nbproject/
+#nbproject/
 dist/
 nbdist/
 nbactions.xml

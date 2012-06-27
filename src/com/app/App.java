@@ -19,7 +19,7 @@ public class App {
     }
 
     private static void searchTwetts() {
-        TwitterApi.getInstance().setQuery("Siena 'Palio Weekend'", 100);
+        TwitterApi.getInstance().setQuery("Siena 'Palio Weekend'", 1000);
     }
 
     private static void insertTwetts() {
@@ -30,11 +30,11 @@ public class App {
             bdbo.put("from_user", tweet.getFromUser());
             bdbo.put("from_user_id", tweet.getFromUserId());
             GeoLocation location = tweet.getGeoLocation();
-            if(location != null){
+            if (location != null) {
                 bdbo.put("geo_location", new BasicDBObject("latitude", tweet.getGeoLocation().getLatitude()).append("longitude", tweet.getGeoLocation().getLongitude()));
-            }else{
+            } else {
                 bdbo.put("geo_location", null);
-            }            
+            }
             bdbo.put("id", tweet.getId());
             bdbo.put("iso_language_code", tweet.getIsoLanguageCode());
             bdbo.put("location", tweet.getLocation());
@@ -47,19 +47,39 @@ public class App {
             Mongodb.getInstance().insert(bdbo);
         }
     }
-    
-    private static void find(){
-        
-        System.out.println(Mongodb.getInstance().size());
-        
-        List<DBObject> objs = Mongodb.getInstance().find(null,null);
+
+    private static void find() {
+        countTweets();
+        findAllTwetts();
+        selectDistinct();
+        selectUserAndText();
+    }
+
+    private static void findAllTwetts() {
+        List<DBObject> objs = Mongodb.getInstance().find(null, null);
         for (DBObject dBObject : objs) {
             System.out.println(dBObject.toString());
         }
-        
+    }
+
+    private static void selectDistinct() {
         List<String> list = Mongodb.getInstance().selectDistinct("from_user");
-        for (String value : list) {
-            System.out.println(value);
+        for (String user : list) {
+            System.out.println(user);
+        }
+    }
+
+    private static void countTweets() {
+        System.out.println(Mongodb.getInstance().size());
+    }
+
+    private static void selectUserAndText() {
+        BasicDBObject keys = new BasicDBObject();
+        keys.append("from_user", 1);
+        keys.append("text", 1);
+        List<DBObject> objs = Mongodb.getInstance().find(null, keys);
+        for (DBObject dBObject : objs) {
+            System.out.println(dBObject.get("from_user") + " " + dBObject.get("text"));
         }
     }
 }
