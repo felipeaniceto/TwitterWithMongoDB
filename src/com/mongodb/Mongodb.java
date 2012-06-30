@@ -6,6 +6,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ *
+ * @author felipe Aniceto
+ * @author Mirlane Ribeiro
+ */
+
 public class Mongodb {
 
     private static final String URL = "localhost";
